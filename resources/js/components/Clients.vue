@@ -18,13 +18,23 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <EditClient></EditClient>
+                <v-btn color="green" x-small dark
+                @click="editItem(item)">                       
+                    Editar  
+                </v-btn> 
                 <v-btn color="red" x-small dark
                 @click="deleteClient(item)">   
                     Borrar  
                 </v-btn>    
             </template>
         </v-data-table>
+        <EditClient 
+        v-model="editedItem"
+        :open="modal"
+        @modal="modal = $event"
+        v-on:updTable="updateTable($event)"
+        >
+        </EditClient>
     </v-card>
 </template>
 
@@ -50,7 +60,13 @@
                     { text: 'Acciones', value: 'actions'},
                 ],
                 clientes: [],
-                eliminado: false
+                eliminado: false,
+                modal: false,
+                editedItem: {
+                    name: '',
+                    phone: '',
+                    address: '',
+                }
             }  
         },
         methods: {
@@ -82,7 +98,13 @@
                 .catch(error=>{
                     console.log(error)
                 })
-            }
+            },
+            editItem(item) 
+            {
+                this.editedItem = Object.assign({}, item)
+                this.modal = true
+                
+            },
         },
     }
 </script>

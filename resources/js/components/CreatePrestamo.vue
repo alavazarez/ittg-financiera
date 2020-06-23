@@ -54,7 +54,7 @@
                 <v-text-field 
                 v-model="prestamo.fechaMinistracion"
                 label="fechaMinistracion" 
-                type="text" 
+                type="date" 
                 required>
                 </v-text-field>
               </v-col>
@@ -62,7 +62,7 @@
                 <v-text-field 
                 v-model="prestamo.fechaVencimiento"
                 label="fechaVencimiento" 
-                type="text" 
+                type="date" 
                 required>
                 </v-text-field>
               </v-col>

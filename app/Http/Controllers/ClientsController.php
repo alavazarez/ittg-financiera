@@ -89,7 +89,7 @@ class ClientsController extends Controller
         $client->address = $request->address;
         $client->save();
 
-        return true;
+        return response()->json(true);   
     }
 
     /**
@@ -101,7 +101,14 @@ class ClientsController extends Controller
     public function destroy($id)
     {
         $client = Client::find($id);
-
+        foreach($client->prestamos as $prestamo)
+        {
+            foreach($prestamo->pagos as $pago)
+            {
+                $pago->delete();
+            }
+            $prestamo->delete();
+        }
         $client->delete();
 
         return $client;

@@ -2037,6 +2037,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2068,7 +2078,13 @@ __webpack_require__.r(__webpack_exports__);
         value: 'actions'
       }],
       clientes: [],
-      eliminado: false
+      eliminado: false,
+      modal: false,
+      editedItem: {
+        name: '',
+        phone: '',
+        address: ''
+      }
     };
   },
   methods: {
@@ -2105,6 +2121,10 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    editItem: function editItem(item) {
+      this.editedItem = Object.assign({}, item);
+      this.modal = true;
     }
   }
 });
@@ -2420,14 +2440,36 @@ __webpack_require__.r(__webpack_exports__);
       update: false
     };
   },
+  props: {
+    open: {
+      type: Boolean,
+      "default": false
+    },
+    value: {
+      type: Object,
+      "default": function _default() {
+        return {
+          id: '',
+          name: '',
+          phone: '',
+          address: ''
+        };
+      }
+    }
+  },
+  watch: {
+    open: function open() {
+      this.dialog = this.open;
+    }
+  },
   methods: {
     guardar: function guardar() {
       var _this = this;
 
-      axios.post('api/clients', this.cliente).then(function (response) {
+      axios.post('api/clients/edit/' + this.value.id, this.value).then(function (response) {
         _this.updateTable();
 
-        _this.dialog = false;
+        _this.close();
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -2435,6 +2477,10 @@ __webpack_require__.r(__webpack_exports__);
     updateTable: function updateTable() {
       this.update = true;
       this.$emit('updTable', this.update);
+    },
+    close: function close() {
+      this.dialog = false;
+      this.$emit('modal', this.dialog);
     }
   }
 });
@@ -22106,7 +22152,22 @@ var render = function() {
             fn: function(ref) {
               var item = ref.item
               return [
-                _c("EditClient"),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "green", "x-small": "", dark: "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(item)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "                       \n                Editar  \n            "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
                 _c(
                   "v-btn",
@@ -22124,6 +22185,25 @@ var render = function() {
             }
           }
         ])
+      }),
+      _vm._v(" "),
+      _c("EditClient", {
+        attrs: { open: _vm.modal },
+        on: {
+          modal: function($event) {
+            _vm.modal = $event
+          },
+          updTable: function($event) {
+            return _vm.updateTable($event)
+          }
+        },
+        model: {
+          value: _vm.editedItem,
+          callback: function($$v) {
+            _vm.editedItem = $$v
+          },
+          expression: "editedItem"
+        }
       })
     ],
     1
@@ -22307,7 +22387,7 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "fechaMinistracion",
-                                  type: "text",
+                                  type: "date",
                                   required: ""
                                 },
                                 model: {
@@ -22333,7 +22413,7 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "fechaVencimiento",
-                                  type: "text",
+                                  type: "date",
                                   required: ""
                                 },
                                 model: {
@@ -22660,11 +22740,11 @@ var render = function() {
                               required: ""
                             },
                             model: {
-                              value: _vm.cliente.name,
+                              value: _vm.value.name,
                               callback: function($$v) {
-                                _vm.$set(_vm.cliente, "name", $$v)
+                                _vm.$set(_vm.value, "name", $$v)
                               },
-                              expression: "cliente.name"
+                              expression: "value.name"
                             }
                           })
                         ],
@@ -22682,11 +22762,11 @@ var render = function() {
                               required: ""
                             },
                             model: {
-                              value: _vm.cliente.phone,
+                              value: _vm.value.phone,
                               callback: function($$v) {
-                                _vm.$set(_vm.cliente, "phone", $$v)
+                                _vm.$set(_vm.value, "phone", $$v)
                               },
-                              expression: "cliente.phone"
+                              expression: "value.phone"
                             }
                           })
                         ],
@@ -22704,11 +22784,11 @@ var render = function() {
                               required: ""
                             },
                             model: {
-                              value: _vm.cliente.address,
+                              value: _vm.value.address,
                               callback: function($$v) {
-                                _vm.$set(_vm.cliente, "address", $$v)
+                                _vm.$set(_vm.value, "address", $$v)
                               },
-                              expression: "cliente.address"
+                              expression: "value.address"
                             }
                           })
                         ],
@@ -22733,11 +22813,7 @@ var render = function() {
                 "v-btn",
                 {
                   attrs: { color: "blue darken-1", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.dialog = false
-                    }
-                  }
+                  on: { click: _vm.close }
                 },
                 [_vm._v("Close")]
               ),

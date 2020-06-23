@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->get('/clients', 'ClientsController@index');
 Route::middleware('auth:sanctum')->post('/clients', 'ClientsController@store');
-Route::middleware('auth:sanctum')->post('/clients/{id}', 'ClientsController@update');
+Route::middleware('auth:sanctum')->post('/clients/edit/{id}', 'ClientsController@update');
 Route::middleware('auth:sanctum')->post('/clients/{id}', 'ClientsController@destroy');
 
 Route::middleware('auth:sanctum')->get('/prestamos', 'PrestamosController@index');
