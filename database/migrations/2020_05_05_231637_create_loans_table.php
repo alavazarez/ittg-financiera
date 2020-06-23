@@ -13,10 +13,15 @@ class CreateLoansTable extends Migration
      */
     public function up()
     {
-        Schema::create('loans', function (Blueprint $table) {
+        Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('client_id');
+            $table->double('cantidad');
+            $table->integer('noPagos');
+            $table->double('cuota');
+            $table->double('totalPagar');
+            $table->date('fechaMinistracion');
+            $table->date('fechaVencimiento');
 
             $table->timestamps();
 

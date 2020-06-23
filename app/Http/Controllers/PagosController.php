@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Models\Prestamo;
+use App\Models\Client;
+use App\Models\Pago;
+use Carbon\Carbon;
+Use Session;
 
-class ClientsController extends Controller
+class PagosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +18,8 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
-        return response()->json($clients);
+        $prestamos = Prestamo::with('client')->get();
+        return response()->json($prestamos); 
     }
 
     /**
@@ -25,7 +29,7 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        return view('clients.create');
+        //
     }
 
     /**
@@ -36,19 +40,7 @@ class ClientsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'  => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-        ]);
-
-        Client::create([
-            'name'  => $request->input('name'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-        ]);
-
-        return response()->json(true);   
+        //
     }
 
     /**
@@ -82,14 +74,7 @@ class ClientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $client = Client::find($id);
-        
-        $client->name = $request->name;
-        $client->phone = $request->phone;
-        $client->address = $request->address;
-        $client->save();
-
-        return true;
+        //
     }
 
     /**
@@ -100,10 +85,6 @@ class ClientsController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::find($id);
-
-        $client->delete();
-
-        return $client;
+        //
     }
 }

@@ -6,6 +6,9 @@ import Home from '@/js/components/Home';
 import About from '@/js/components/About';
 import Login from '@/js/pages/LoginPage';
 import View from '@/js/views/View';
+import Clients from '@/js/components/Clients';
+import Prestamos from '@/js/components/Prestamos';
+import Pagos from '@/js/components/Pagos';
 
 Vue.use(VueRouter);
 
@@ -26,6 +29,22 @@ const router = new VueRouter({
                     name: 'about',
                     component: About
                 },
+                {
+                    path: '/clients',
+                    name: 'clients',
+                    component: Clients
+                },
+                {
+                    path: '/prestamos',
+                    name: 'prestamos',
+                    component: Prestamos
+                },
+                {
+                    path: '/pagos',
+                    name: 'pagos',
+                    component: Pagos
+                },
+                
             ]
         },
         {
