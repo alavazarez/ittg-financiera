@@ -14,7 +14,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::orderBy('id')->get();
         return response()->json($clients);
     }
 

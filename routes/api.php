@@ -28,4 +28,8 @@ Route::middleware('auth:sanctum')->post('/prestamos', 'PrestamosController@store
 Route::middleware('auth:sanctum')->get('/prestamos/names', 'PrestamosController@select');
 Route::middleware('auth:sanctum')->post('/prestamos/{id}', 'PrestamosController@destroy');
 
+//Route::middleware('auth:sanctum')->get('/export', 'PagosController@exportExcel');
+
+Route::middleware('auth:sanctum')->put('/pagos/abono/{id}', 'PrestamosController@abonar');
 Route::middleware('auth:sanctum')->get('/pagos', 'PagosController@index');
+Route::middleware('auth:sanctum')->get('/pagos/show/{id}', 'PagosController@show');

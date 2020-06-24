@@ -14,13 +14,18 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <!-- Descargar Excel <CreateUsers v-on:updTable="updateTable($event)"></CreateUsers> -->
+                    <v-btn>
+                        Exportar
+                    </v-btn>
                 </v-toolbar>
             </template>
             <template>
-                <ShowPagos>
-                <!--  Ver detalles de pagos -->
-                </ShowPagos>
+                <ShowPagos></ShowPagos>
+            </template>
+            <template v-slot:item.actions="{ item }">
+                <v-btn dark :to="{ name:'showPagos', params:{id:item.id}}" color="yellow" x-small>                       
+                    Show  
+                </v-btn> 
             </template>
             <template v-slot:item.name="{ item }">
                 {{ item.client.name }}
@@ -51,8 +56,7 @@
                     { text: 'Saldo Pendiente', value: 'prestamo_restante'},
                     { text: 'Acciones', value: 'actions'},
                 ],
-                pagos: [],
-                //eliminado: false
+                pagos: []
             }  
         },
         methods: {

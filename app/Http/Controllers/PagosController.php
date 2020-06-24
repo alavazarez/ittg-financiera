@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\exportarExcel;
+
 use Illuminate\Http\Request;
 use App\Models\Prestamo;
 use App\Models\Client;
@@ -49,9 +52,10 @@ class PagosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) 
     {
-        //
+        $prestamos = Pago::where('prestamo_id', $id)->orderBy('number')->get();
+        return response()->json($prestamos); 
     }
 
     /**
@@ -87,4 +91,9 @@ class PagosController extends Controller
     {
         //
     }
+
+    /* public function exportExcel()
+    {
+        return Excel::download(new exportarExcel, 'Lista-de-pagos.xlsx');
+    } */
 }

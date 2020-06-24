@@ -9,6 +9,7 @@ import View from '@/js/views/View';
 import Clients from '@/js/components/Clients';
 import Prestamos from '@/js/components/Prestamos';
 import Pagos from '@/js/components/Pagos';
+import ShowPagos from '@/js/components/ShowPagos';
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,11 @@ const router = new VueRouter({
                     name: 'pagos',
                     component: Pagos
                 },
+                {
+                    path: '/pagos/show/:id',
+                    name: 'showPagos',
+                    component: ShowPagos
+                }, 
                 
             ]
         },

@@ -161,6 +161,47 @@ class PrestamosController extends Controller
         return $prestamo;
     }
 
+    public function abonar(Request $request, $id)
+    {
+        $pagos = Pago::where('prestamo_id',$id)->orderBy('number')->get();
+        
+        $i=0;
+        $size = $pagos->count();
+        $cuota = $pagos[$i]->cantidad;
+        $abonarInput= $request->abonar;
+        $date = Carbon::now()->format('Y-m-d H:i:s');
+        do
+        {
+            $abonado = $pagos[$i]->abono;//obtiene el valor abonado en la posicion X
+            if($abonado == $cuota)
+            {
+                $i++;
+            }
+            else
+            {
+                $abonarInput= $abonado + $abonarInput;
+                if($abonarInput <= $cuota)
+                {
+                    $pagos[$i]->abono = $abonarInput;
+                    $pagos[$i]->fechaAbono = $date;
+                    $pagos[$i]->save();
+                    $i=$size;
+                }
+                else if($abonarInput > $cuota)
+                {
+                    $pagos[$i]->abono = $cuota;
+                    $pagos[$i]->fechaAbono = $date;
+                    $pagos[$i]->save();
+                    $abonarInput = $abonarInput - $cuota;
+                    $i++;
+                }
+            }
+        }while($i<$size);
+
+        return response()->json(true);
+        //return redirect()->route('pagos.abonar', ['id'=>$id]);
+    }
+
     public function select()
     {
         $nombres = Client::select('id','name')->get();
