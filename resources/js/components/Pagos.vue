@@ -14,8 +14,11 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <v-btn @click="exportar">
-                        Exportar
+                    <v-btn
+                    @click="exportar"
+                    color="primary"
+                    dark>
+                    Exportar pagos
                     </v-btn>
                 </v-toolbar>
             </template>
@@ -58,7 +61,7 @@ import XLSX from "xlsx";
                     { text: 'Acciones', value: 'actions'},
                 ],
                 pagos: [],
-                table:[]
+                exportTable:[]
             }  
         },
         methods: {
@@ -77,32 +80,17 @@ import XLSX from "xlsx";
                     this.getPagos()
                 }
             },
-            exportar: function()
-            {
-                axios.get('api/pagos/table')
+            exportar: function(){
+                axios.get('/api/pagos/table')
                     .then(response=>{
-                        this.table = response.data
+                        this.exportTable = response.data
                         const workbook = XLSX.utils.book_new()
                         const filename = 'pagos'
-                        let data = XLSX.utils.json_to_sheet(this.table)
+                        let data = XLSX.utils.json_to_sheet(this.exportTable)
                         XLSX.utils.book_append_sheet(workbook, data, filename)
                         XLSX.writeFile(workbook, `${filename}.xlsx`)
                     })
             },
-            /* downloand: function()
-            {
-                const workbook = XLSX.utils.book_new()
-                const filename = 'pagos'
-                let data = XLSX.utils.json_to_sheet(this.table)
-                XLSX.utils.book_append_sheet(workbook, data, filename)
-                XLSX.writeFile(workbook, `${filename}.xlsx`)
-            }, */
-                /* const workbook = XLSX.utils.book_new()
-                const filename = 'pagos'
-                let data = XLSX.utils.json_to_sheet(this.table)
-                XLSX.utils.book_append_sheet(workbook, data, filename)
-                XLSX.writeFile(workbook, `${filename}.xlsx`) */
-            
         }
     }
 </script>

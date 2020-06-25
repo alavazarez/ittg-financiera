@@ -148,7 +148,74 @@ class PrestamosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $prestamo = Prestamo::findOrFail($id);
+
+        if($prestamo->pagos[0]->abono >0)
+        {
+            return redirect()->route('prestamos.index')->with('flash', 'Ya se realiazo un abono para ese prestamo');
+        }
+        else
+        {
+            $prestamo->client_id = $request->client_id;
+            $prestamo->cantidad = $request->cantidad;
+            $prestamo->noPagos = $request->noPagos;
+            $prestamo->cuota = $request->cuota;
+            $prestamo->totalPagar = $request->noPagos * $request->cuota;
+            $prestamo->fechaMinistracion = $request->fechaMinistracion;
+            $prestamo->fechaVencimiento = $request->fechaVencimiento;
+            $prestamo->save();
+
+            $prestamo = Prestamo::with('pagos')->findOrFail($id);
+            $lastRegistro = $prestamo->pagos->last();           //Obtengo el ultimo registro
+            $lastNoPago = $lastRegistro->number;                //Obtengo el ultimo numero de pago del registro de arriba
+            $NewNoPago = $request->noPagos;                     //Guardo el nuevo numero de pagos del input
+            $i = $lastNoPago + 1;                               //Servira para recorrer el indice
+            $lastFechaPago = $lastRegistro->fechaPago;          //Como es mayor el nuevo No.Pagos, obtengo la ultima fecha de pago para ingresar a los nuevos
+            $lastFechaPago = Carbon::parse($lastFechaPago);      //Convertimos la fecha string a carbon
+
+            if($lastNoPago < $NewNoPago)                        //Si el ultimo numero de pago es menor al del input
+            {   
+                for($j=0; $j<$lastNoPago; $j++)
+                {       
+                    $prestamo->pagos[$j]->cantidad = $prestamo->cuota;
+                    $prestamo->pagos[$j]->save();
+                }
+                do
+                {
+                    $dayNext = $lastFechaPago->addDay();
+                    $newFechaPago = $dayNext->dayOfWeek;
+                    if($newFechaPago != 0 && $newFechaPago != 6)
+                    {
+                        $pagos = new Pago();
+                        $pagos->prestamo_id = $prestamo->id;            //ID del prestamo
+                        $pagos->number = $i;                            //4
+                        $pagos->cantidad = $request->input('cuota');
+                        $pagos->fechaPago = $dayNext;
+                        $pagos->abono = ('0');
+                        $pagos->save();
+                        $i++;
+                    }
+                }while($i<=$request->input('noPagos'));
+            }
+            else if($lastNoPago == $NewNoPago)
+            {
+                for($j=0; $j<$lastNoPago; $j++)
+                {       
+                    $prestamo->pagos[$j]->cantidad = $prestamo->cuota;
+                    $prestamo->pagos[$j]->save();
+                }
+            }
+            else if($lastNoPago > $NewNoPago)
+            {
+                $firstRegistro = $prestamo->pagos->first();             //Obtengo el primer registro de pagos
+                $firstNoPago = $firstRegistro->number;                  //Obtengo el primer numero de pago del registro de arriba
+                for($k=$NewNoPago; $k<$lastNoPago; $k++)                //Indicador de la posicion
+                {
+                    $prestamo->pagos[$k]->delete();
+                }                                      
+            }
+            return response()->json(true);
+        }
     }
 
     /**

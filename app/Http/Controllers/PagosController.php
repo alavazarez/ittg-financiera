@@ -25,8 +25,9 @@ class PagosController extends Controller
 
     public function tablas()
     {
+        $prestamos = Prestamo::all();
         //$prestamos = Prestamo::with('client')->get();
-        $prestamos = Prestamo::join('Clients','client_id', '=', 'Clients.id')->select('cantidad','Clients.name')->get();
+        //$prestamos = Prestamo::join('Clients','client_id', '=', 'Clients.id')->select('Clients.name', 'cantidad', 'cuota', 'noPagos', 'totalPagar')->get();
         //'cantidad', 'cuota', 'noPagos', 'totalPagar')->get();
         return response()->json($prestamos);
     }

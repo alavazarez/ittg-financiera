@@ -64,7 +64,7 @@
                     { text: 'Acciones', value: 'actions'},
                 ],
                 clientes: [],
-                eliminado: false,
+                //eliminado: false,
                 modal: false,
                 editedItem: {
                     name: '',
@@ -107,7 +107,6 @@
             {
                 this.editedItem = Object.assign({}, item)
                 this.modal = true
-                
             },
         },
     }

@@ -9,7 +9,7 @@
             </p>
             <v-text-field
             v-model="cantidad"
-            placeholder="Dense & Rounded"
+            readonly
             filled
             rounded
             dense

@@ -20,7 +20,10 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <EditPrestamo></EditPrestamo>
+                <v-btn color="green" x-small dark
+                @click="editItem(item)">                       
+                    Editar  
+                </v-btn> 
                 <v-btn color="red" x-small dark
                 @click="deletePrestamo(item)">   
                     Borrar  
@@ -30,6 +33,13 @@
                 {{ item.client.name }}
             </template>
         </v-data-table>
+        <EditPrestamo 
+        v-model="editedItem"
+        :open="modal"
+        @modal="modal = $event"
+        v-on:updTable="updateTable($event)"
+        >
+        </EditPrestamo>
     </v-card>
 </template>
 
@@ -58,8 +68,18 @@
                     { text: 'Fecha de vencimiento', value: 'fechaVencimiento'},
                     { text: 'Acciones', value: 'actions'},
                 ],
-                prestamos: []
+                prestamos: [],
                 //eliminado: false
+                modal: false,
+                editedItem: {
+                    client_id: '',
+                    cantidad: '',
+                    noPagos: '',
+                    cuota: '',
+                    totalPagar: '',
+                    fechaMinistracion: '',
+                    fechaVencimiento: '',
+                }
             }  
         },
         methods: {
@@ -91,7 +111,12 @@
                 .catch(error=>{
                     console.log(error)
                 })
-            }
+            },
+            editItem(item) 
+            {
+                this.editedItem = Object.assign({}, item)
+                this.modal = true
+            },
         },
     }
 </script>
