@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use App\Models\Prestamo;
 use App\Models\Client;
 use App\Models\Pago;
-use Carbon\Carbon;
-Use Session;
 
 class PagosController extends Controller
 {
@@ -23,6 +21,13 @@ class PagosController extends Controller
     {
         $prestamos = Prestamo::with('client')->get();
         return response()->json($prestamos); 
+    }
+
+    public function tablas()
+    {
+        //$prestamos = Prestamo::join('Clients','client_id', '=', 'Clients.id')->select('cantidad','Clients.name')->get();
+        $prestamos = Prestamo::with('client')->get();
+        return response()->json($prestamos);
     }
 
     /**
@@ -91,9 +96,4 @@ class PagosController extends Controller
     {
         //
     }
-
-    /* public function exportExcel()
-    {
-        return Excel::download(new exportarExcel, 'Lista-de-pagos.xlsx');
-    } */
 }

@@ -1,10 +1,10 @@
 <template>
     <v-app>
-        <v-navigation-drawer app color="primary" absolute :value="drawerOpen" dark>
+        <v-navigation-drawer app color="grey lighten-1" absolute :value="drawerOpen" dark>
             <navigation></navigation>
         </v-navigation-drawer>
 
-        <v-app-bar app color="yellow">
+        <v-app-bar app color="teal">
             <v-app-bar-nav-icon @click="drawerToggle"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 Financiera

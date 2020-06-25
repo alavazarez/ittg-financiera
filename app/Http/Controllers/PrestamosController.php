@@ -18,7 +18,7 @@ class PrestamosController extends Controller
      */
     public function index()
     {
-        $prestamos = Prestamo::with('client')->get();
+        $prestamos = Prestamo::with('client')->orderBy('id')->get();
         return response()->json($prestamos);
     }
 
@@ -45,16 +45,23 @@ class PrestamosController extends Controller
             'cantidad' => 'required',
             'noPagos' => 'required',
             'cuota' => 'required',
-            //'fechaMinistracion' => 'required',
+            'fechaMinistracion' => 'required',
             //'fechaVencimiento' => 'required',
         ]);
 
-        $date = Carbon::now();
+        $date = $request->input('fechaMinistracion');
+        $n = $request->input('noPagos');
+        $m = $request->input('cuota');
+        $datefinish = Carbon::parse($date);
+        $j = 1; 
 
+        //$request->abonar;
+
+        /* $date = Carbon::now();
         $n = $request->input('noPagos');
         $m = $request->input('cuota');
         $datefinish = Carbon::now();
-        $j = 1;
+        $j = 1; */
         $dateAdd = $datefinish->addDay();  //Sumamos un dia al actual
         do
         {
@@ -91,6 +98,7 @@ class PrestamosController extends Controller
         $i = 1;
         do
         {   
+            $date = Carbon::parse($date);
             $dayNext = $date->addDay();
             $dateDay = $dayNext->dayOfWeek;
             if($dateDay != 0 && $dateDay != 6)

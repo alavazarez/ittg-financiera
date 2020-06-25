@@ -12,7 +12,7 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline"><strong>Crear Prestamo</strong></span>
+          <span class="headline"><strong>Crear Prestamo del cliente</strong></span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -36,6 +36,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field 
+                @change="sumaFecha"
                 v-model="prestamo.noPagos"
                 label="noPagos" 
                 type="text" 
@@ -52,6 +53,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field 
+                @change="sumaFecha"
                 v-model="prestamo.fechaMinistracion"
                 label="fechaMinistracion" 
                 type="date" 
@@ -80,10 +82,13 @@
 </template>
 
 <script>
+import moment from 'moment-business-days'
     export default {
        name: 'CreatePrestamos',
        mounted: function(){
-         this.getNames()
+         this.getNames(),
+         this.prestamo.fechaMinistracion = this.fecha
+         this.prestamo.fechaVencimiento = this.fechaFinal
        },
        data: () => ({
            dialog: false,
@@ -99,6 +104,17 @@
            names:[],
            select: { state: 'Nombre', abbr: 'id' },
        }),
+       computed: {
+          fecha(){
+            return moment().format('YYYY-MM-DD') 
+          },
+          fechaFinal(){
+            let date = moment(this.prestamo.fechaMinistracion).businessAdd(this.prestamo.noPagos)._d
+            date = moment(date).format('YYYY-MM-DD')
+            return date
+          }
+
+       },
        methods: {
             guardar(){
                 axios.post('api/prestamos',this.prestamo)
@@ -122,6 +138,10 @@
                 .catch (error=>{
                   console.log(error)
                 })
+            },
+            sumaFecha()
+            {
+              this.prestamo.fechaVencimiento= this.fechaFinal
             }
         },
     }

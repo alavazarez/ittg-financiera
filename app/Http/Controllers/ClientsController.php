@@ -25,7 +25,8 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        return view('clients.create');
+        $count = Client::select('id')->count();
+        return response()->json($count);
     }
 
     /**

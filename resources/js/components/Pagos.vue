@@ -14,7 +14,7 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <v-btn>
+                    <v-btn @click="test">
                         Exportar
                     </v-btn>
                 </v-toolbar>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
     export default {
         name: 'Pagos',
         components: {
@@ -56,7 +57,8 @@
                     { text: 'Saldo Pendiente', value: 'prestamo_restante'},
                     { text: 'Acciones', value: 'actions'},
                 ],
-                pagos: []
+                pagos: [],
+                table:[]
             }  
         },
         methods: {
@@ -74,7 +76,28 @@
                 {
                     this.getPagos()
                 }
-            }
-        },
+            },
+            test(){                                   //Se declara una funcion en JS
+                axios.get('api/pagos/table')
+                    .then(response=>(                       //axios: UNa libreri de js para hacer peticiones
+                    this.table = response.data           //Guarda la respuesta en el arreglo
+                ))
+                .catch(error=>{
+                    console.log(error)
+                })
+            },
+            exportar()
+            {
+                axios.get('api/pagos/table')
+                    .then(response=>{
+                        this.table = response.data
+                    })
+                /* const workbook = XLSX.utils.book_new()
+                const filename = 'pagos'
+                let data = XLSX.utils.json_to_sheet(this.table)
+                XLSX.utils.book_append_sheet(workbook, data, filename)
+                XLSX.writeFile(workbook, `${filename}.xlsx`) */
+            },
+        }
     }
 </script>
