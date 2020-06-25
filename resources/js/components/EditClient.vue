@@ -1,6 +1,7 @@
 <template>
+<v-form v-model="valid"
+lazy-validation>
     <v-dialog v-model="dialog" persistent max-width="600px">
-      
       <v-card>
         <v-card-title>
           <span class="headline"><strong>Actualizar Usuario</strong></span>
@@ -13,6 +14,7 @@
                     v-model="value.name"
                     label="Nombre" 
                     type="text" 
+                    :rules="nameRules" 
                     required>
                 </v-text-field>
               </v-col>
@@ -20,7 +22,8 @@
                 <v-text-field 
                     v-model="value.phone"
                     label="Telefono" 
-                    type="text" 
+                    type="number"
+                    :rules="phoneRules" 
                     required>
                 </v-text-field>
               </v-col>
@@ -29,6 +32,7 @@
                 v-model="value.address"
                 label="Direccion" 
                 type="text" 
+                :rules="addressRules" 
                 required>
                 </v-text-field>
               </v-col>
@@ -38,15 +42,26 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="close">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="guardar">Actualizar</v-btn>
+          <v-btn color="blue darken-1" text @click="guardar" :disabled="!valid">Actualizar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+  </v-form>
 </template>
 <script>
     export default {
        name: 'EditClient',
        data: () => ({
+         valid: true,
+          nameRules:[
+            v => !!v || 'Nombre requerido'
+          ],
+          phoneRules:[
+            v => !!v || 'Telefono requerido'
+          ],
+          addressRules:[
+            v => !!v || 'Direccion requerida'
+          ],
            dialog: false,
            cliente:{
                name:'',

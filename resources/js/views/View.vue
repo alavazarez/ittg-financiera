@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-navigation-drawer app color="grey lighten-1" absolute :value="drawerOpen" dark>
+        <v-navigation-drawer app color="blue-grey" absolute :value="drawerOpen" dark>
             <navigation></navigation>
         </v-navigation-drawer>
 

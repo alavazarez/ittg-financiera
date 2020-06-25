@@ -1,4 +1,6 @@
 <template>
+<v-form v-model="valid"
+lazy-validation>
   <v-row justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
@@ -24,13 +26,15 @@
                   item-text="name"
                   item-value="id"
                   label="Nombre"
+                  :rules="nombreRules"
               ></v-select>
               </v-col>
               <v-col cols="12">
                 <v-text-field 
                     v-model="prestamo.cantidad"
                     label="cantidad" 
-                    type="text" 
+                    type="number" 
+                    :rules="cantidadRules"
                     required>
                 </v-text-field>
               </v-col>
@@ -38,8 +42,9 @@
                 <v-text-field 
                 @change="sumaFecha"
                 v-model="prestamo.noPagos"
-                label="noPagos" 
-                type="text" 
+                label="Numero de pagos" 
+                type="number" 
+                :rules="noPagosRules"
                 required>
                 </v-text-field>
               </v-col>
@@ -47,7 +52,8 @@
                 <v-text-field 
                 v-model="prestamo.cuota"
                 label="cuota" 
-                type="text" 
+                type="number" 
+                :rules="cuotaRules"
                 required>
                 </v-text-field>
               </v-col>
@@ -74,11 +80,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="guardar">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="guardar" :disabled="!valid">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
+  </v-form>
 </template>
 
 <script>
@@ -91,6 +98,20 @@ import moment from 'moment-business-days'
          this.prestamo.fechaVencimiento = this.fechaFinal
        },
        data: () => ({
+          valid: true,
+          nombreRules:[
+            v => !!v || 'Nombre requerido'
+          ],
+          cantidadRules:[
+            v => !!v || 'Cantidad requerida'
+          ],
+          noPagosRules:[
+            v => !!v || 'Numero de pagos requerido'
+          ],
+          cuotaRules:[
+            v => !!v || 'Cuota requerida'
+          ],
+
            dialog: false,
            prestamo:{
                client_id:'',

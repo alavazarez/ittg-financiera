@@ -1,4 +1,6 @@
 <template>
+<v-form v-model="valid"
+lazy-validation>
   <v-row justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
@@ -21,7 +23,8 @@
                 <v-text-field 
                     v-model="cliente.name"
                     label="Nombre" 
-                    type="text" 
+                    type="text"
+                    :rules="nameRules" 
                     required>
                 </v-text-field>
               </v-col>
@@ -29,7 +32,8 @@
                 <v-text-field 
                     v-model="cliente.phone"
                     label="Telefono" 
-                    type="text" 
+                    type="number"
+                    :rules="phoneRules" 
                     required>
                 </v-text-field>
               </v-col>
@@ -38,6 +42,7 @@
                 v-model="cliente.address"
                 label="Direccion" 
                 type="text" 
+                :rules="addressRules" 
                 required>
                 </v-text-field>
               </v-col>
@@ -47,16 +52,27 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="guardar">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="guardar" :disabled="!valid">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
+  </v-form>
 </template>
 <script>
     export default {
        name: 'CreateUsers',
        data: () => ({
+          valid: true,
+          nameRules:[
+            v => !!v || 'Nombre requerido'
+          ],
+          phoneRules:[
+            v => !!v || 'Telefono requerido'
+          ],
+          addressRules:[
+            v => !!v || 'Direccion requerida'
+          ],
            dialog: false,
            cliente:{
                name:'',

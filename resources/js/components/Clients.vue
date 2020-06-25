@@ -14,6 +14,8 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
+                    <ImportClients v-on:updTable="updateTable($event)"></ImportClients>
+                    <v-spacer></v-spacer>
                     <CreateUsers v-on:updTable="updateTable($event)"></CreateUsers>
                 </v-toolbar>
             </template>
@@ -41,11 +43,13 @@
 <script>
     import CreateUsers from '@/js/components/CreateUsers';
     import EditClient from '@/js/components/EditClient';
+    import ImportClients from '@/js/components/ImportClients';
     export default {
         name: 'Clients',
         components: {
             CreateUsers,
             EditClient,
+            ImportClients,
         },
         mounted: function(){    //ciclo de vida del componente
             this.getClients()

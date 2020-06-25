@@ -1,7 +1,7 @@
 <template>
     <v-list>
         <v-list-item-content>
-              <v-list-item-title>FINANCIERA S.A. de C.V.</v-list-item-title>
+              <v-list-item-title><strong>FINANCIERA S.A. de C.V.</strong></v-list-item-title>
               <v-list-item-subtitle>El mejor prestamo para ti</v-list-item-subtitle>
             </v-list-item-content>
       

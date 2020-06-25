@@ -14,7 +14,7 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <v-btn @click="test">
+                    <v-btn @click="exportar">
                         Exportar
                     </v-btn>
                 </v-toolbar>
@@ -77,27 +77,32 @@ import XLSX from "xlsx";
                     this.getPagos()
                 }
             },
-            test(){                                   //Se declara una funcion en JS
-                axios.get('api/pagos/table')
-                    .then(response=>(                       //axios: UNa libreri de js para hacer peticiones
-                    this.table = response.data           //Guarda la respuesta en el arreglo
-                ))
-                .catch(error=>{
-                    console.log(error)
-                })
-            },
-            exportar()
+            exportar: function()
             {
                 axios.get('api/pagos/table')
                     .then(response=>{
                         this.table = response.data
+                        const workbook = XLSX.utils.book_new()
+                        const filename = 'pagos'
+                        let data = XLSX.utils.json_to_sheet(this.table)
+                        XLSX.utils.book_append_sheet(workbook, data, filename)
+                        XLSX.writeFile(workbook, `${filename}.xlsx`)
                     })
+            },
+            /* downloand: function()
+            {
+                const workbook = XLSX.utils.book_new()
+                const filename = 'pagos'
+                let data = XLSX.utils.json_to_sheet(this.table)
+                XLSX.utils.book_append_sheet(workbook, data, filename)
+                XLSX.writeFile(workbook, `${filename}.xlsx`)
+            }, */
                 /* const workbook = XLSX.utils.book_new()
                 const filename = 'pagos'
                 let data = XLSX.utils.json_to_sheet(this.table)
                 XLSX.utils.book_append_sheet(workbook, data, filename)
                 XLSX.writeFile(workbook, `${filename}.xlsx`) */
-            },
+            
         }
     }
 </script>

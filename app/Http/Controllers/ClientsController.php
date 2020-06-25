@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\importExcel;
 use App\Models\Client;
 use Illuminate\Http\Request;
 
@@ -28,6 +30,20 @@ class ClientsController extends Controller
         $count = Client::select('id')->count();
         return response()->json($count);
     }
+
+    public function importClients(Request $request)
+    {
+        Excel::import(new importExcel, $request->file('file'));
+        return true;
+    }
+
+    /* public function importExcel(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new ClientsImport, $file);
+
+        return back()->with('message', 'Importancion de clientes completada');
+    } */
 
     /**
      * Store a newly created resource in storage.
