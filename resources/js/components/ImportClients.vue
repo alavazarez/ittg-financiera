@@ -22,8 +22,8 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn outlined color="indigo" text @click="actualizarTable">Cerrar</v-btn>
-          <v-btn class="ma-2" outlined color="indigo" text v-on:click="EventSubir">Subir</v-btn>
+          <v-btn color="primary" text @click="actualizarTable">Cerrar</v-btn>
+          <v-btn color="primary" text @click="EventSubir">Subir</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
